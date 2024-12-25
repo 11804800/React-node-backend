@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const NoteSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        minLength:[3,"title Should not be less than 3 Characters"]
     },
     description: {
         type: String

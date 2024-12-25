@@ -7,6 +7,8 @@ import { ConnectToDB } from "./db/db.config.js";
 
 ConnectToDB();
 
+app.use(express.json());
+
 app.use("/index",indexRouter);
 app.use("/users",UserRouter);
 app.use("/notes",NoteRouter);
