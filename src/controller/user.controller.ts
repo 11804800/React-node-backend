@@ -28,13 +28,16 @@ export async function LoginUser(req: any, res: any) {
     try {
         const { email } = req.body;
         const user = await User.findOne({ email: email });
-        if(!user)
-        {
-            res.status(404).json({message:`user not found with email ${email}`});
+        const errors = validationResult(req);
+        
+        if (!errors.isEmpty()) {
+            res.status(400).json({ errors: errors });
         }
-        else
-        {
-            res.status(200).json({message:"Login Successfull"});
+        else if (!user) {
+            res.status(404).json({ message: `user not found with email ${email}` });
+        }
+        else {
+            res.status(200).json({ message: "Login Successfull" });
         }
     }
     catch (err: any) {
