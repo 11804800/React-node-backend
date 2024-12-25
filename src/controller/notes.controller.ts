@@ -3,7 +3,7 @@ import Notes from "../model/notes.model";
 
 export async function GetNotes(req: any, res: any) {
     try {
-        const result = await Notes.find({author:req.params.author});
+        const result = await Notes.find({author:req.user.user});
         res.status(200).json({ result: result });
     }
     catch (err: any) {
@@ -67,7 +67,7 @@ export async function DeleteNotesById(req: any, res: any) {
 export async function DeleteAllNotes(req: any, res: any) {
     try {
         //delete where the note's author matched with author name
-        const result=await Notes.deleteMany({author:req.params.author});
+        const result=await Notes.deleteMany({author:req.user.user});
         res.status(200).json(result);
     }
     catch (err: any) {

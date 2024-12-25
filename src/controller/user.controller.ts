@@ -1,5 +1,6 @@
 import User from "../model/user.model";
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 
 export async function CreateUser(req: any, res: any) {
     try {
@@ -27,7 +28,7 @@ export async function CreateUser(req: any, res: any) {
 export async function LoginUser(req: any, res: any) {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email:email });
         const errors = validationResult(req);
         
         if (!errors.isEmpty()) {
@@ -37,7 +38,8 @@ export async function LoginUser(req: any, res: any) {
             res.status(404).json({ message: `user not found with email ${email}` });
         }
         else {
-            res.status(200).json({ message: "Login Successfull" });
+            const token=jwt.sign({user:email},"123456");
+            res.status(200).json({ message: "Login Successfull",token:token });
         }
     }
     catch (err: any) {
