@@ -16,7 +16,8 @@ export async function CreateUser(req: any, res: any) {
                 date_of_birth: dob,
                 otp: otp
             });
-            const token = jwt.sign({ user: email }, "123456");
+            const secret:any=process.env.SECRET_KEY;
+            const token = jwt.sign({ user: email }, secret);
             res.status(201).json({ user: user,token:token });
         }
     }
@@ -40,7 +41,8 @@ export async function LoginUser(req: any, res: any) {
         }
         else {
             if (user.otp == otp) {
-                const token = jwt.sign({ user: email }, "123456");
+                const secret:any=process.env.SECRET_KEY;
+                const token = jwt.sign({ user: email }, secret);
                 res.status(200).json({ message: "Login Successfull", token: token });
             }
             else
