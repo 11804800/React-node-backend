@@ -1,4 +1,6 @@
 import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
 let app=express();
 import indexRouter from "./routes/index";
 import NoteRouter from "./routes/notes.routes";
