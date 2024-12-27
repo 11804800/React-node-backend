@@ -17,6 +17,10 @@ const UserSchema=new Schema({
     date_of_birth:{
         type:Date,
         required:true
+    },
+    otp:{
+        type:String,
+        required:true
     }
 },{
     timestamps:true

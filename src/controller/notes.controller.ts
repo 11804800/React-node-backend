@@ -38,6 +38,7 @@ export async function CreateNotes(req: any, res: any) {
 
 export async function UpdateNotes(req: any, res: any) {
     try {
+        console.log(req.headers);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(400).json({ errors: errors });

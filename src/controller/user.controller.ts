@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export async function CreateUser(req: any, res: any) {
     try {
-        const { fullname, email, dob } = req.body;
+        const { fullname, email, dob, otp } = req.body;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(400).json({ errors: errors });
@@ -13,10 +13,11 @@ export async function CreateUser(req: any, res: any) {
             const user = await User.create({
                 fullname: fullname,
                 email: email,
-                date_of_birth: dob
+                date_of_birth: dob,
+                otp: otp
             });
-
-            res.status(201).json({ user: user });
+            const token = jwt.sign({ user: email }, "123456");
+            res.status(201).json({ user: user,token:token });
         }
     }
     catch (err: any) {
@@ -27,10 +28,10 @@ export async function CreateUser(req: any, res: any) {
 //for login 
 export async function LoginUser(req: any, res: any) {
     try {
-        const { email } = req.body;
-        const user = await User.findOne({ email:email });
+        const { email, otp } = req.body;
+        const user:any = await User.findOne({ email: email });
         const errors = validationResult(req);
-        
+
         if (!errors.isEmpty()) {
             res.status(400).json({ errors: errors });
         }
@@ -38,8 +39,14 @@ export async function LoginUser(req: any, res: any) {
             res.status(404).json({ message: `user not found with email ${email}` });
         }
         else {
-            const token=jwt.sign({user:email},"123456");
-            res.status(200).json({ message: "Login Successfull",token:token });
+            if (user.otp == otp) {
+                const token = jwt.sign({ user: email }, "123456");
+                res.status(200).json({ message: "Login Successfull", token: token });
+            }
+            else
+            {
+                res.status(401).json({message:"Otp didn't Match"});
+            }
         }
     }
     catch (err: any) {
